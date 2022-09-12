@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  uncademy_acadRec_ms:
+    container_name: UNcademy_acadRec_ms
+    restart: always
+    build: .
+    ports:
+    links:
+      - uncademy_acadRec_db
+    
+  uncademy_congrades_db:
+    container_name: UNcademy_acadRec_db
+    image: mongo
+    ports:
+    - "27019:27019"
+#version: '3.8'
+#services:
+#  app:
+#    container_name: app
+#    build: .
+#    ports:
+#      - "80.80"
+#    depends_on:
+#      - db
+#  db:
+#    image: mongo
+#    ports:
+#      -"27017:27017"
