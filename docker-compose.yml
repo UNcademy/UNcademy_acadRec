@@ -1,17 +1,29 @@
 #version: '3.8'
 
 services:
-    uncademy_acadrec_ms:
-      container_name: UNcademy_acadRec_ms
-      build: ./UNcademy_acadRec_ms
-      ports: 
-        - 8000:8000
-      depends_on:
-        - uncademy_acadrec_db
 
-    uncademy_acadrec_db:
-      container_name: UNcademy_acadRec_db 
-      image: mongo
-      ports:
-        - 27018:27017
+#  uncademy_acadrec_ms:
+  app:
+#    container_name: UNcademy_acadRec_ms
+    build: ./UNcademy_acadRec_ms
+    ports: 
+      - 3333:8000
+    environment:
+      - DB_URL=mongodb://db:27017/
+#      - DB_URL=mongodb://uncademy_acadrec_db:27017/
+#      - DB_URL=mongodb://hpta:hpta@b8cc1cbfbe39_UNcademy_acadRec_db
+#      - DB_URL=mongodb://b8cc1cbfbe39_UNcademy_acadRec_db:27017/
+#      - DB_URL=mongodb://uncademy_acadrec_db/AcademicRecords
+    depends_on:
+      - db
+
+#  uncademy_acadrec_db:
+  db:
+#    container_name: UNcademy_acadRec_db 
+    image: mongo
+    ports:
+      - 27088:27017
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=hpta
+#      - MONGO_INITDB_ROOT_PASSWORD=hpta
 
