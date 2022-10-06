@@ -10,11 +10,10 @@ import os
 app = FastAPI()
 
 app.include_router(academicRecord)
-print(os.environ['MQ_URL'])
+
 async def consume(loop):
 #  connection = await connect_robust(host='localhost',port=5672, loop=loop)
   connection = await connect_robust(host=os.environ['MQ_URL'],port=5672, loop=loop)
-#  connection = await connect_robust(os.environ['MQ_URL'], loop=loop)
   channel = await connection.channel()
 
   queue = await channel.declare_queue('shistory_history_q')
