@@ -57,8 +57,7 @@ async def find_all_approved_courses():
 
 @academicRecord.post('/academic-record/recordFromMQ')
 async def create_record_MQ(message: dict):
-#  academicRecord: AcademicRecord
-  ar = {}#dict(academicRecord)
+  ar = {}
   ar['userId'] = message['Username']
   ar['planDeEstudios'] = message['Program']
   acadRec.insert_one(ar)
