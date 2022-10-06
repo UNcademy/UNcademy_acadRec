@@ -1,14 +1,19 @@
 #version: '3.8'
 
 services:
+
   app:
     build: ./UNcademy_acadRec_ms
     ports: 
       - 3333:8000
     environment:
       - DB_URL=mongodb://db:27017/
+      - MQ_URL=localhost
     depends_on:
       - db
+#      - rabbitmq
+#  rabbitmq:
+#      image: rabbitmq
   db:
     image: mongo
     ports:
