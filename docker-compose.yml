@@ -8,10 +8,10 @@ services:
       - 3333:8000
     environment:
       - DB_URL=mongodb://db:27017/
-      - MQ_URL=localhost
+      - MQ_URL=172.17.0.1
+#      - MQ_URL=amqp://guest:guest@rabbitmq/
     depends_on:
       - db
-#      - rabbitmq
 #  rabbitmq:
 #      image: rabbitmq
   db:
