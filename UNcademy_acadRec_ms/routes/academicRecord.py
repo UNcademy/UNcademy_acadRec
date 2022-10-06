@@ -56,11 +56,12 @@ async def find_all_approved_courses():
   return materias
 
 @academicRecord.post('/academic-record/recordFromMQ')
-async def create_record_MQ(a):#academicRecord: AcademicRecord):
-#  ar = dict(academicRecord)
-#  ar =
-#  acadRec.insert_one(ar)
-#  return serializeList(acadRec.find())
-  print('Respuesta MQ '+a)
-  return 'respuesta MQ' + a
+async def create_record_MQ(message: dict):
+#  academicRecord: AcademicRecord
+  ar = {}#dict(academicRecord)
+  ar['userId'] = message['Username']
+  ar['planDeEstudios'] = message['Program']
+  acadRec.insert_one(ar)
+  print(ar)
+  return serializeList(acadRec.find())
 

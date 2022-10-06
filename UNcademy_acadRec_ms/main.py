@@ -22,11 +22,11 @@ async def consume(loop):
     print(" [x] Received %r" % message)
 
   async def callback(message):
-    await create_record_MQ('from post event')
     await message.ack()
     body = message.body
     if body:
       inc(json.loads(body))
+    await create_record_MQ(json.loads(body))
 
   await queue.consume(callback, no_ack=False)
   print(' [*] Waiting for messages. To exit press CTRL+C')
