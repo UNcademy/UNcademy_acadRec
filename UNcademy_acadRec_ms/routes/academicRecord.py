@@ -9,26 +9,43 @@ academicRecord = APIRouter()
 def setAdvance(records,semester):
   pass
 
+# New
+@academicRecord.get('/academic-record/{userId}')
+async def student_records(userId: str):
+  return serializeList(acadRec.find({"userId": userId}))
+
+@academicRecord.get('/academic-record/student-program/{userId}')
+async def student_program(userId: str):
+  return serializeList(acadRec.find({"userId": userId}, {"programa": 1, "_id": 0}))
+
 @academicRecord.get('/academic-record/')
 async def find_all_records():
   return serializeList(acadRec.find())
 
 @academicRecord.post('/academic-record/')
 async def create_record(academicRecord: AcademicRecord):
-  records = await find_all_records()
   ar = dict(academicRecord)
-  for idx in range(0,len(ar['materias'])):
+  records = await student_records(ar["userId"])
+  for idx in range(len(ar['materias'])):
     ar['materias'][idx] = dict(ar['materias'][idx])
-  print(ar['materias'])
-  ar['creditosInscritos'] = 0
-  ar['creditosAprobados'] = 0
-  ar['creditosPendientes'] = 0
-  ar['creditosCursados'] = 0
-  ar['creditosCancelados'] = 0
-  ar['papa'] = 0
-  ar['pa'] = 0
-  ar['pappi'] = 0
-  ar['avance'] = 0
+
+  ar['programa'] = dict(ar['programa'])
+  cd = ar['programa']['creditosDisciplinarOpt'] + ar['programa']['creditosDisciplinarOb']
+  cf = ar['programa']['creditosFundamentacionOpt'] + ar['programa']['creditosFundamentacionOb']
+  cl = ar['programa']['creditosLibreEleccion']
+  cg = ar['programa']['creditosTrabajoDeGrado']
+  ct = cd + cf + cl + cg
+  
+  ca = ar['creditosAprobados']
+#  ar['creditosInscritos'] = 0
+#  ar['creditosAprobados'] = 0
+  ar['creditosPendientes'] = ct - ca
+  ar['creditosCursados'] = 3
+#  ar['creditosCancelados'] = 0
+  ar['papa'] = 3.7
+  ar['pa'] = 4.3
+  ar['pappi'] = 3.1
+  ar['avance'] = "{:.1%}".format(ca/ct)
 
   acadRec.insert_one(ar)
   return serializeList(acadRec.find())
@@ -44,10 +61,10 @@ async def update_record(id, academicRecord: AcademicRecord):
 async def delete_record(id, academicRecord: AcademicRecord):
   return serializeDict(acadRec.find_one_and_delete({"_id":ObjectId(id)}))
 
-# Materias pasadas
-@academicRecord.get('/academic-record/materias')
-async def find_all_approved_courses():
-  records = await find_all_records()
+# Devuelve todas las materias aprovadas del estudiante
+@academicRecord.get('/academic-record/materias/{userId}')
+async def student_approved_courses(userId: str):
+  records = await student_records(userId)
   materias = []
   for i in records:
     for j in i['materias']:
@@ -58,8 +75,10 @@ async def find_all_approved_courses():
 @academicRecord.post('/academic-record/recordFromMQ')
 async def create_record_MQ(message: dict):
   ar = {}
+  plan = {}
   ar['userId'] = message['Username']
-  ar['planDeEstudios'] = message['Program']
+  plan['programaId'] = message['Program']
+  ar['programa'] = plan
   acadRec.insert_one(ar)
   print(ar)
   return serializeList(acadRec.find())

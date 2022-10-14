@@ -8,6 +8,15 @@ class Materia(BaseModel):
   aprobado: bool 
   creditos: int
 
+class Programa(BaseModel):
+  programaId: str | None = None
+  creditosDisciplinarOpt: int | None = None
+  creditosDisciplinarOb: int | None = None
+  creditosFundamentacionOpt: int | None = None
+  creditosFundamentacionOb: int | None = None
+  creditosLibreEleccion: int | None = None
+  creditosTrabajoDeGrado: int | None = None
+
 class AcademicRecord(BaseModel):
   userId: str
   semestre: str | None = None
@@ -21,5 +30,5 @@ class AcademicRecord(BaseModel):
   pappi: float | None = None
   avance: str | None = None
   materias: list[Materia] | None = None 
-  planDeEstudios: str
+  programa: Programa | None = None
 
