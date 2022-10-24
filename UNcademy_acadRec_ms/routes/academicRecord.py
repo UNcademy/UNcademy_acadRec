@@ -12,7 +12,7 @@ def setAdvance(records,semester):
 # New
 @academicRecord.get('/academic-record/{userId}')
 async def student_records(userId: str):
-  return serializeList(acadRec.find({"userId": userId}))
+  return serializeList(acadRec.find({"userId": userId}).sort("semestre", 1).limit(1))
 
 @academicRecord.get('/academic-record/student-program/{userId}')
 async def student_program(userId: str):
