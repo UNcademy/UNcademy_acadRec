@@ -45,7 +45,10 @@ async def create_record(academicRecord: AcademicRecord):
   ar['papa'] = 3.7
   ar['pa'] = 4.3
   ar['pappi'] = 3.1
-  ar['avance'] = "{:.1%}".format(ca/ct)
+  if ct > 0:
+    ar['avance'] = "{:.1%}".format(ca/ct)
+  else:
+    ar['avance'] = "{:.1%}".format(0)
 
   acadRec.insert_one(ar)
   return serializeList(acadRec.find())
