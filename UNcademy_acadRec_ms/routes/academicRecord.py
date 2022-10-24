@@ -16,7 +16,7 @@ async def student_records(userId: str):
 
 @academicRecord.get('/academic-record/student-program/{userId}')
 async def student_program(userId: str):
-  return serializeList(acadRec.find({"userId": userId}, {"programa": 1, "_id": 0}))
+  return serializeList(acadRec.find({"userId": userId}, {"programa": 1, "_id": 0}).limit(1))
 
 @academicRecord.get('/academic-record/')
 async def find_all_records():
